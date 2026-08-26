@@ -1,0 +1,920 @@
+/**
+ * Tutor Instructor Offline Payment
+ *
+ * One stylesheet for the replaced checkout, the three dashboard pages and the
+ * admin overview. Deliberately plain: Tutor's own utility classes carry most of
+ * the typography on the checkout, so what is here is layout, spacing and the few
+ * components Tutor has no equivalent for.
+ *
+ * Everything is prefixed `tioc-` and scoped under a wrapper, so it cannot leak
+ * into a theme.
+ */
+
+:root {
+	--tioc-border: #e3e6eb;
+	--tioc-surface: #fff;
+	--tioc-surface-muted: #f7f8fa;
+	--tioc-text: #212327;
+	--tioc-text-muted: #5b616f;
+	--tioc-accent: #3e64de;
+	--tioc-accent-text: #fff;
+	--tioc-success-bg: #e8f6ee;
+	--tioc-success-text: #1a7f45;
+	--tioc-warning-bg: #fdf4e3;
+	--tioc-warning-text: #8a5b00;
+	--tioc-error-bg: #fdecec;
+	--tioc-error-text: #b32d2e;
+	--tioc-info-bg: #eef2fd;
+	--tioc-info-text: #2d4bb0;
+	--tioc-radius: 8px;
+}
+
+/* -----------------------------------------------------------------------------
+ * Shared primitives
+ * -------------------------------------------------------------------------- */
+
+.tioc-muted {
+	color: var(--tioc-text-muted);
+	font-size: 0.875em;
+}
+
+.tioc-alert {
+	border: 1px solid transparent;
+	border-radius: var(--tioc-radius);
+	margin: 0 0 16px;
+	padding: 12px 16px;
+	font-size: 14px;
+	line-height: 1.5;
+}
+
+.tioc-alert ul {
+	margin: 0;
+	padding-left: 18px;
+}
+
+.tioc-alert a {
+	text-decoration: underline;
+}
+
+.tioc-alert-success {
+	background: var(--tioc-success-bg);
+	border-color: rgba(26, 127, 69, 0.25);
+	color: var(--tioc-success-text);
+}
+
+.tioc-alert-warning {
+	background: var(--tioc-warning-bg);
+	border-color: rgba(138, 91, 0, 0.25);
+	color: var(--tioc-warning-text);
+}
+
+.tioc-alert-error {
+	background: var(--tioc-error-bg);
+	border-color: rgba(179, 45, 46, 0.25);
+	color: var(--tioc-error-text);
+}
+
+.tioc-alert-info {
+	background: var(--tioc-info-bg);
+	border-color: rgba(45, 75, 176, 0.25);
+	color: var(--tioc-info-text);
+}
+
+.tioc-badge {
+	display: inline-block;
+	border-radius: 999px;
+	padding: 2px 10px;
+	font-size: 12px;
+	font-weight: 500;
+	line-height: 1.6;
+	white-space: nowrap;
+}
+
+.tioc-badge.is-pending {
+	background: var(--tioc-warning-bg);
+	color: var(--tioc-warning-text);
+}
+
+.tioc-badge.is-paid {
+	background: var(--tioc-success-bg);
+	color: var(--tioc-success-text);
+}
+
+.tioc-badge.is-rejected {
+	background: var(--tioc-error-bg);
+	color: var(--tioc-error-text);
+}
+
+.tioc-badge.is-refunded {
+	background: var(--tioc-surface-muted);
+	color: var(--tioc-text-muted);
+}
+
+.tioc-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	border: 1px solid var(--tioc-border);
+	border-radius: 6px;
+	background: var(--tioc-surface);
+	color: var(--tioc-text);
+	cursor: pointer;
+	font-size: 14px;
+	font-weight: 500;
+	line-height: 1.4;
+	padding: 9px 16px;
+	text-decoration: none;
+	transition: background 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.tioc-btn:hover,
+.tioc-btn:focus {
+	background: var(--tioc-surface-muted);
+	color: var(--tioc-text);
+}
+
+.tioc-btn:disabled,
+.tioc-btn[aria-disabled="true"] {
+	cursor: not-allowed;
+	opacity: 0.55;
+}
+
+.tioc-btn-primary {
+	background: var(--tioc-accent);
+	border-color: var(--tioc-accent);
+	color: var(--tioc-accent-text);
+}
+
+.tioc-btn-primary:hover,
+.tioc-btn-primary:focus {
+	background: #3252bd;
+	border-color: #3252bd;
+	color: var(--tioc-accent-text);
+}
+
+.tioc-btn-ghost {
+	background: transparent;
+}
+
+.tioc-btn-danger-ghost {
+	background: transparent;
+	border-color: rgba(179, 45, 46, 0.35);
+	color: var(--tioc-error-text);
+}
+
+.tioc-btn-danger-ghost:hover,
+.tioc-btn-danger-ghost:focus {
+	background: var(--tioc-error-bg);
+	color: var(--tioc-error-text);
+}
+
+.tioc-inline-form {
+	display: inline-block;
+	margin: 0;
+}
+
+/* -----------------------------------------------------------------------------
+ * Forms
+ * -------------------------------------------------------------------------- */
+
+.tioc-form {
+	margin: 0;
+}
+
+.tioc-field {
+	margin-bottom: 16px;
+}
+
+.tioc-label {
+	display: block;
+	font-size: 13px;
+	font-weight: 600;
+	margin-bottom: 6px;
+}
+
+.tioc-input {
+	box-sizing: border-box;
+	width: 100%;
+	max-width: 520px;
+	border: 1px solid var(--tioc-border);
+	border-radius: 6px;
+	background: var(--tioc-surface);
+	color: var(--tioc-text);
+	font-size: 14px;
+	line-height: 1.5;
+	padding: 9px 12px;
+}
+
+.tioc-input:focus {
+	border-color: var(--tioc-accent);
+	outline: 2px solid rgba(62, 100, 222, 0.18);
+	outline-offset: 0;
+}
+
+textarea.tioc-input {
+	min-height: 90px;
+	resize: vertical;
+}
+
+input[type="file"].tioc-input {
+	padding: 7px 10px;
+}
+
+.tioc-help {
+	color: var(--tioc-text-muted);
+	font-size: 12px;
+	line-height: 1.5;
+	margin: 6px 0 0;
+}
+
+.tioc-checkbox {
+	display: inline-flex;
+	align-items: flex-start;
+	gap: 8px;
+	font-size: 14px;
+	line-height: 1.4;
+}
+
+.tioc-checkbox input {
+	margin: 2px 0 0;
+}
+
+.tioc-form-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	margin-top: 8px;
+}
+
+.tioc-current-image {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-bottom: 10px;
+}
+
+.tioc-current-image img {
+	width: 64px;
+	height: 64px;
+	border: 1px solid var(--tioc-border);
+	border-radius: 6px;
+	object-fit: cover;
+}
+
+.tioc-notice-slot:empty {
+	display: none;
+}
+
+.tioc-collapse[hidden] {
+	display: none;
+}
+
+.tioc-collapse {
+	border-top: 1px solid var(--tioc-border);
+	margin-top: 14px;
+	padding-top: 14px;
+	grid-column: 1 / -1;
+}
+
+/* -----------------------------------------------------------------------------
+ * Dashboard pages
+ * -------------------------------------------------------------------------- */
+
+.tioc-dash {
+	color: var(--tioc-text);
+}
+
+.tioc-dash-head {
+	margin-bottom: 20px;
+}
+
+.tioc-dash-title {
+	font-size: 20px;
+	font-weight: 600;
+	margin: 0 0 6px;
+}
+
+.tioc-dash-subtitle {
+	color: var(--tioc-text-muted);
+	font-size: 14px;
+	line-height: 1.6;
+	margin: 0;
+	max-width: 68ch;
+}
+
+.tioc-card {
+	background: var(--tioc-surface);
+	border: 1px solid var(--tioc-border);
+	border-radius: var(--tioc-radius);
+	margin-bottom: 20px;
+	padding: 20px;
+}
+
+.tioc-card-title {
+	font-size: 16px;
+	font-weight: 600;
+	margin: 0 0 14px;
+}
+
+.tioc-toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 18px;
+}
+
+.tioc-tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+}
+
+.tioc-tab {
+	border: 1px solid transparent;
+	border-radius: 999px;
+	color: var(--tioc-text-muted);
+	font-size: 13px;
+	padding: 6px 14px;
+	text-decoration: none;
+}
+
+.tioc-tab:hover,
+.tioc-tab:focus {
+	background: var(--tioc-surface-muted);
+	color: var(--tioc-text);
+}
+
+.tioc-tab.is-active {
+	background: var(--tioc-surface-muted);
+	border-color: var(--tioc-border);
+	color: var(--tioc-text);
+	font-weight: 600;
+}
+
+.tioc-search {
+	display: flex;
+	gap: 6px;
+	margin: 0;
+}
+
+.tioc-search .tioc-input {
+	max-width: 280px;
+}
+
+.tioc-empty-state {
+	background: var(--tioc-surface-muted);
+	border: 1px dashed var(--tioc-border);
+	border-radius: var(--tioc-radius);
+	color: var(--tioc-text-muted);
+	padding: 32px 20px;
+	text-align: center;
+}
+
+.tioc-empty-state p {
+	margin: 0 0 12px;
+}
+
+/* Payment-method list */
+
+.tioc-method-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.tioc-method-row {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	gap: 12px;
+	border: 1px solid var(--tioc-border);
+	border-radius: var(--tioc-radius);
+	margin-bottom: 12px;
+	padding: 16px;
+}
+
+.tioc-method-row-main {
+	min-width: 0;
+}
+
+.tioc-method-row-title {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 8px;
+	font-size: 15px;
+	font-weight: 600;
+	margin-bottom: 6px;
+}
+
+.tioc-method-row-body {
+	color: var(--tioc-text-muted);
+	font-size: 14px;
+	line-height: 1.6;
+	overflow-wrap: anywhere;
+}
+
+.tioc-method-row-body p {
+	margin: 0 0 6px;
+}
+
+.tioc-method-row-thumb {
+	display: block;
+	width: 80px;
+	height: auto;
+	border: 1px solid var(--tioc-border);
+	border-radius: 6px;
+	margin-top: 8px;
+}
+
+.tioc-method-row-actions {
+	display: flex;
+	align-items: flex-start;
+	gap: 6px;
+}
+
+/* Order list, shared by the instructor and student pages */
+
+.tioc-order-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.tioc-order {
+	background: var(--tioc-surface);
+	border: 1px solid var(--tioc-border);
+	border-radius: var(--tioc-radius);
+	margin-bottom: 14px;
+	padding: 18px;
+}
+
+.tioc-order-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 12px;
+}
+
+.tioc-order-head-right {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 6px;
+}
+
+.tioc-order-id {
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.tioc-order-student {
+	color: var(--tioc-text-muted);
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	font-size: 13px;
+	margin-top: 2px;
+}
+
+.tioc-order-total {
+	font-size: 16px;
+	font-weight: 600;
+}
+
+.tioc-order-items {
+	list-style: none;
+	margin: 12px 0 0;
+	padding: 0;
+}
+
+.tioc-order-items li {
+	font-size: 14px;
+	margin-bottom: 4px;
+}
+
+.tioc-order-meta {
+	display: grid;
+	grid-template-columns: max-content 1fr;
+	gap: 4px 16px;
+	margin: 14px 0 0;
+	font-size: 13px;
+}
+
+.tioc-order-meta dt {
+	color: var(--tioc-text-muted);
+	font-weight: 500;
+	margin: 0;
+}
+
+.tioc-order-meta dd {
+	margin: 0;
+	overflow-wrap: anywhere;
+}
+
+.tioc-order-note {
+	background: var(--tioc-surface-muted);
+	border-radius: 6px;
+	font-size: 13px;
+	line-height: 1.6;
+	margin-top: 14px;
+	padding: 10px 12px;
+}
+
+.tioc-order-note.is-rejected {
+	background: var(--tioc-error-bg);
+	color: var(--tioc-error-text);
+}
+
+.tioc-order-note.is-paid {
+	background: var(--tioc-success-bg);
+	color: var(--tioc-success-text);
+}
+
+.tioc-order-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	border-top: 1px solid var(--tioc-border);
+	margin-top: 16px;
+	padding-top: 14px;
+}
+
+.tioc-method-recap {
+	background: var(--tioc-surface-muted);
+	border-radius: 6px;
+	font-size: 14px;
+	line-height: 1.6;
+	margin-top: 12px;
+	padding: 14px;
+}
+
+.tioc-method-recap p {
+	margin: 6px 0;
+}
+
+.tioc-method-recap .tioc-method-image {
+	display: block;
+	max-width: 220px;
+	height: auto;
+	border: 1px solid var(--tioc-border);
+	border-radius: 6px;
+	margin-top: 10px;
+}
+
+.tioc-pagination {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin-top: 18px;
+}
+
+.tioc-page {
+	border: 1px solid var(--tioc-border);
+	border-radius: 6px;
+	color: var(--tioc-text);
+	font-size: 13px;
+	min-width: 34px;
+	padding: 6px 10px;
+	text-align: center;
+	text-decoration: none;
+}
+
+.tioc-page.is-current {
+	background: var(--tioc-accent);
+	border-color: var(--tioc-accent);
+	color: var(--tioc-accent-text);
+	font-weight: 600;
+}
+
+/* -----------------------------------------------------------------------------
+ * Checkout
+ * -------------------------------------------------------------------------- */
+
+.tioc-checkout .tioc-checkout-notice {
+	margin-bottom: 20px;
+}
+
+.tioc-checkout .tioc-empty {
+	padding: 40px 0;
+	text-align: center;
+}
+
+.tioc-coupon-form {
+	margin: 0;
+}
+
+.tioc-group-heading {
+	display: flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: 8px;
+	border-bottom: 1px solid var(--tioc-border);
+	font-size: 13px;
+	font-weight: 600;
+	margin-bottom: 14px;
+	padding-bottom: 10px;
+}
+
+.tioc-group-subtotal {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border-top: 1px solid var(--tioc-border);
+	font-size: 13px;
+	margin-top: 12px;
+	padding-top: 10px;
+}
+
+.tioc-group-items + .tioc-group-items {
+	margin-top: 20px;
+}
+
+.tioc-apply-coupon {
+	display: flex;
+	gap: 8px;
+	margin: 8px 0 4px;
+}
+
+.tioc-apply-coupon input {
+	flex: 1 1 auto;
+	min-width: 0;
+	box-sizing: border-box;
+	border: 1px solid var(--tioc-border);
+	border-radius: 6px;
+	font-size: 14px;
+	padding: 8px 12px;
+}
+
+.tioc-payment-section {
+	border-top: 1px solid var(--tioc-border);
+	padding-top: 20px;
+}
+
+.tioc-payee {
+	border: 1px solid var(--tioc-border);
+	border-radius: var(--tioc-radius);
+	margin-bottom: 16px;
+	padding: 16px;
+}
+
+.tioc-payee-head {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+}
+
+.tioc-payee-avatar {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+	object-fit: cover;
+	flex: 0 0 auto;
+}
+
+.tioc-payee-identity {
+	min-width: 0;
+}
+
+.tioc-payee-name {
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.tioc-payee-amount {
+	color: var(--tioc-text-muted);
+	font-size: 13px;
+}
+
+.tioc-payee-note {
+	background: var(--tioc-info-bg);
+	border-radius: 6px;
+	color: var(--tioc-info-text);
+	font-size: 13px;
+	line-height: 1.6;
+	margin-top: 12px;
+	padding: 10px 12px;
+}
+
+.tioc-payee-note p {
+	margin: 0 0 6px;
+}
+
+.tioc-payee-note p:last-child {
+	margin-bottom: 0;
+}
+
+.tioc-methods {
+	margin-top: 14px;
+}
+
+.tioc-method {
+	border: 1px solid var(--tioc-border);
+	border-radius: 6px;
+	margin-bottom: 8px;
+	padding: 12px 14px;
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: 4px 10px;
+	align-items: start;
+}
+
+.tioc-method-input {
+	margin: 3px 0 0;
+}
+
+.tioc-method-label {
+	font-size: 14px;
+	font-weight: 600;
+	cursor: pointer;
+	margin: 0;
+}
+
+/* The details of a method only matter once it is the chosen one. */
+.tioc-method-details {
+	grid-column: 2;
+	display: none;
+	color: var(--tioc-text-muted);
+	font-size: 13px;
+	line-height: 1.6;
+}
+
+.tioc-method-input:checked ~ .tioc-method-details {
+	display: block;
+}
+
+.tioc-method-input:checked ~ .tioc-method-label {
+	color: var(--tioc-text);
+}
+
+.tioc-method-instructions p {
+	margin: 4px 0;
+}
+
+.tioc-method-instructions {
+	overflow-wrap: anywhere;
+}
+
+.tioc-method-details .tioc-method-image {
+	display: inline-block;
+	margin-top: 8px;
+}
+
+.tioc-method-details .tioc-method-image img {
+	display: block;
+	max-width: 200px;
+	height: auto;
+	border: 1px solid var(--tioc-border);
+	border-radius: 6px;
+}
+
+.tioc-payee-fields {
+	border-top: 1px solid var(--tioc-border);
+	margin-top: 14px;
+	padding-top: 14px;
+}
+
+.tioc-online-alternative {
+	border-top: 1px dashed var(--tioc-border);
+	margin-top: 16px;
+	padding-top: 16px;
+}
+
+.tioc-checkout .tioc-error {
+	color: var(--tioc-error-text);
+}
+
+/* Client-side upload validation message. */
+.tioc-proof-input[aria-invalid="true"] {
+	border-color: var(--tioc-error-text) !important;
+}
+
+.tioc-field-error {
+	color: var(--tioc-error-text);
+	font-size: 12px;
+	margin: 4px 0 0;
+}
+
+/* -----------------------------------------------------------------------------
+ * WP admin
+ * -------------------------------------------------------------------------- */
+
+.tioc-admin-wrap .description {
+	max-width: 80ch;
+}
+
+.tioc-admin-table td {
+	vertical-align: top;
+}
+
+.tioc-admin-table code {
+	font-size: 11px;
+	padding: 1px 4px;
+}
+
+.tioc-admin-row-meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px;
+	margin-top: 6px;
+}
+
+.tioc-chip {
+	background: var(--tioc-surface-muted);
+	border: 1px solid var(--tioc-border);
+	border-radius: 999px;
+	color: var(--tioc-text-muted);
+	display: inline-block;
+	font-size: 11px;
+	line-height: 1.6;
+	padding: 1px 8px;
+	text-decoration: none;
+}
+
+.tioc-chip-link:hover,
+.tioc-chip-link:focus {
+	border-color: var(--tioc-accent);
+	color: var(--tioc-accent);
+}
+
+.tioc-settings .form-table td p.description {
+	max-width: 70ch;
+}
+
+/* -----------------------------------------------------------------------------
+ * Narrow screens
+ * -------------------------------------------------------------------------- */
+
+@media (max-width: 640px) {
+	.tioc-method-row {
+		grid-template-columns: 1fr;
+	}
+
+	.tioc-order-head-right {
+		align-items: flex-start;
+	}
+
+	.tioc-order-meta {
+		grid-template-columns: 1fr;
+		gap: 0 0;
+	}
+
+	.tioc-order-meta dt {
+		margin-top: 8px;
+	}
+
+	.tioc-toolbar {
+		align-items: stretch;
+		flex-direction: column;
+	}
+
+	.tioc-search .tioc-input {
+		max-width: none;
+	}
+}
+
+/* -----------------------------------------------------------------------------
+ * Receipt popup
+ * -------------------------------------------------------------------------- */
+
+.tioc-receipt-modal {
+	position: fixed;
+	inset: 0;
+	background: rgba(0, 0, 0, 0.75);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 24px;
+	z-index: 100000;
+}
+
+.tioc-receipt-modal-inner {
+	position: relative;
+	max-width: 90vw;
+	max-height: 90vh;
+}
+
+.tioc-receipt-modal-inner img {
+	display: block;
+	max-width: 90vw;
+	max-height: 90vh;
+	border-radius: 6px;
+	box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+}
+
+.tioc-receipt-modal-close {
+	position: absolute;
+	top: -36px;
+	right: 0;
+	background: transparent;
+	border: none;
+	color: #fff;
+	font-size: 28px;
+	line-height: 1;
+	cursor: pointer;
+	padding: 0 4px;
+}
